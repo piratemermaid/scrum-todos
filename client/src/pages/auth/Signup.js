@@ -14,7 +14,7 @@ const Signup = () => {
     const [passwordMatch, setPasswordMatch] = useState("");
     const [formError, setFormError] = useState(null);
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
         const error = validateFields();
@@ -22,19 +22,18 @@ const Signup = () => {
         if (error) {
             setFormError(error);
         } else {
-            axios({
-                method: "post",
-                url: "/api/account/signup",
-                params: { username, password, passwordMatch, email }
-            })
-                .then((res) => {
-                    if (res.data.signup === "success") {
-                        alert("SIGNUP");
-                    }
-                })
-                .catch((err) => {
-                    setFormError(err.response.data);
+            try {
+                const { data } = await axios({
+                    method: "post",
+                    url: "/api/account/signup",
+                    params: { username, password, passwordMatch, email }
                 });
+                if (data.signup === "success") {
+                    alert("SIGNUP");
+                }
+            } catch (err) {
+                setFormError(err.response.data);
+            }
         }
     };
 
@@ -82,58 +81,68 @@ const Signup = () => {
                                 <Label className="has-text-left">
                                     Username
                                 </Label>
-                                <Input
-                                    id="username"
-                                    type="text"
-                                    placeholder="Username"
-                                    value={username}
-                                    onChange={(e) =>
-                                        setUsername(e.target.value)
-                                    }
-                                />
+                                <Control>
+                                    <Input
+                                        id="username"
+                                        type="text"
+                                        placeholder="Username"
+                                        value={username}
+                                        onChange={(e) =>
+                                            setUsername(e.target.value)
+                                        }
+                                    />
+                                </Control>
                             </Field>
                             <Field>
                                 <Label className="has-text-left">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="text"
-                                    placeholder="Email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
+                                <Control>
+                                    <Input
+                                        id="email"
+                                        type="text"
+                                        placeholder="Email"
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
+                                    />
+                                </Control>
                             </Field>
                             <Field>
                                 <Label className="has-text-left">
                                     Password
                                 </Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                />
+                                <Control>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                    />
+                                </Control>
                             </Field>
                             <Field>
                                 <Label className="has-text-left">
                                     Confirm Password
                                 </Label>
-                                <Input
-                                    id="passwordMatch"
-                                    type="password"
-                                    placeholder="Confirm Password"
-                                    value={passwordMatch}
-                                    onChange={(e) =>
-                                        setPasswordMatch(e.target.value)
-                                    }
-                                />
+                                <Control>
+                                    <Input
+                                        id="passwordMatch"
+                                        type="password"
+                                        placeholder="Confirm Password"
+                                        value={passwordMatch}
+                                        onChange={(e) =>
+                                            setPasswordMatch(e.target.value)
+                                        }
+                                    />
+                                </Control>
                             </Field>
                             <div className="form-error">{formError}</div>
-                            <button type="button" onClick={onSubmit}>
+                            <Button type="submit" onClick={onSubmit}>
                                 Sign Up
-                            </button>
+                            </Button>
                         </form>
                         <div>
                             Already have an account?{" "}

@@ -12,22 +12,21 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [formError, setFormError] = useState(null);
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
-        axios({
-            method: "post",
-            url: "/api/account/login",
-            params: { username, password }
-        })
-            .then((res) => {
-                if (res.data.login === "success") {
-                    alert("LOGIN");
-                }
-            })
-            .catch((err) => {
-                setFormError(err.response.data);
+        try {
+            const { data } = await axios({
+                method: "post",
+                url: "/api/account/login",
+                params: { username, password }
             });
+            if (data.login === "success") {
+                alert("LOGIN");
+            }
+        } catch (err) {
+            setFormError(err.response.data);
+        }
     };
 
     const onInputChange = (e, field) => {
