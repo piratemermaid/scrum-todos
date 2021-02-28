@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
+import { Container } from "react-bulma-components";
+import { Columns } from "react-bulma-components";
+import { Form } from "react-bulma-components";
+import { Button } from "react-bulma-components";
+const { Field, Control, Label, Input } = Form;
 
 class Signup extends Component {
     constructor(props) {
@@ -87,53 +92,84 @@ class Signup extends Component {
         return (
             <div>
                 <h1>Sign Up</h1>
-                <form onSubmit={(e) => this.onSubmit(e)}>
-                    <div className="input-field">
-                        <input
-                            id="username"
-                            type="text"
-                            placeholder="username"
-                            value={username}
-                            onChange={(e) => this.onInputChange(e, "username")}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <input
-                            id="email"
-                            type="text"
-                            placeholder="email"
-                            value={email}
-                            onChange={(e) => this.onInputChange(e, "email")}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="password"
-                            value={password}
-                            onChange={(e) => this.onInputChange(e, "password")}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <input
-                            id="passwordMatch"
-                            type="password"
-                            placeholder="passwordMatch"
-                            value={passwordMatch}
-                            onChange={(e) =>
-                                this.onInputChange(e, "passwordMatch")
-                            }
-                        />
-                    </div>
-                    <div className="form-error">{errorMessage}</div>
-                    <button type="button" onClick={(e) => this.onSubmit(e)}>
-                        Sign Up
-                    </button>
-                </form>
-                <div>
-                    Already have an account? <Link to="/login">Log In</Link>
-                </div>
+                <Container>
+                    <Columns className="is-centered">
+                        <Columns.Column className="is-one-quarter-desktop">
+                            <form onSubmit={(e) => this.onSubmit(e)}>
+                                <Field>
+                                    <Label className="has-text-left">
+                                        Username
+                                    </Label>
+                                    <Input
+                                        id="username"
+                                        type="text"
+                                        placeholder="Username"
+                                        value={username}
+                                        onChange={(e) =>
+                                            this.onInputChange(e, "username")
+                                        }
+                                    />
+                                </Field>
+                                <Field>
+                                    <Label className="has-text-left">
+                                        Email
+                                    </Label>
+                                    <Input
+                                        id="email"
+                                        type="text"
+                                        placeholder="Email"
+                                        value={email}
+                                        onChange={(e) =>
+                                            this.onInputChange(e, "email")
+                                        }
+                                    />
+                                </Field>
+                                <Field>
+                                    <Label className="has-text-left">
+                                        Password
+                                    </Label>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) =>
+                                            this.onInputChange(e, "password")
+                                        }
+                                    />
+                                </Field>
+                                <Field>
+                                    <Label className="has-text-left">
+                                        Confirm Password
+                                    </Label>
+                                    <Input
+                                        id="passwordMatch"
+                                        type="password"
+                                        placeholder="Confirm Password"
+                                        value={passwordMatch}
+                                        onChange={(e) =>
+                                            this.onInputChange(
+                                                e,
+                                                "passwordMatch"
+                                            )
+                                        }
+                                    />
+                                </Field>
+                                <div className="form-error">{errorMessage}</div>
+                                <button
+                                    type="button"
+                                    onClick={(e) => this.onSubmit(e)}
+                                >
+                                    Sign Up
+                                </button>
+                            </form>
+                            <div>
+                                Already have an account?{" "}
+                                <Link to="/login">Log In</Link>
+                            </div>
+                        </Columns.Column>
+                    </Columns>
+                </Container>
             </div>
         );
     }
