@@ -1,3 +1,5 @@
+const { hash } = require("../../api/helpers/account");
+
 module.exports = {
     tags: ["Todos", "Daily", "Workout", "Stardew"],
     items: [
@@ -55,5 +57,12 @@ module.exports = {
         //     blocker: "",
         //     tags: [""]
         // },
+    ],
+    users: [
+        {
+            username: "testaccount",
+            password: hash("1234"),
+            email: "a@a.com"
+        }
     ]
 };

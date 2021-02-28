@@ -1,13 +1,14 @@
 const { keyBy } = require("lodash");
 const tableOrder = require("../tableOrder");
 const seedData = require("../data/seedData");
-const { tags, items } = seedData;
+const { users, tags, items } = seedData;
 
 exports.seed = async function (knex) {
-
     for (let i = tableOrder.length - 1; i >= 0; i--) {
         await resetTable(knex, tableOrder[i]);
     }
+
+    await knex("users").insert(users).returning("*");
 
     const tagsByName = keyBy(
         await knex("tags")
@@ -50,7 +51,11 @@ exports.seed = async function (knex) {
 
     await knex("items_tags").insert(itemsTags);
 
-    // TODO: users_items - create testuser
+    await knex("users_items").insert(
+        items.map(({ name }) => {
+            return { item_id: itemsByName[name].id, user_id: 1 };
+        })
+    );
 };
 
 // delete table and reset to start at id 1
