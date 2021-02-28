@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { withRouter, Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Container } from "react-bulma-components";
 import { Columns } from "react-bulma-components";
 import { Form } from "react-bulma-components";
@@ -12,6 +12,8 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [formError, setFormError] = useState(null);
 
+    const history = useHistory();
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -22,7 +24,7 @@ const Login = () => {
                 params: { username, password }
             });
             if (data.login === "success") {
-                alert("LOGIN");
+                history.push("/");
             }
         } catch (err) {
             setFormError(err.response.data);
@@ -89,4 +91,4 @@ const Login = () => {
     );
 };
 
-export default withRouter(Login);
+export default Login;
