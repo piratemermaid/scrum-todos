@@ -38,7 +38,7 @@ module.exports.up = async function (knex) {
 };
 
 module.exports.down = async function (knex) {
-    for (let i = tableOrder.length; i >= 0; i--) {
+    for (let i = tableOrder.length - 1; i >= 0; i--) {
         await knex.schema.dropTableIfExists(tableOrder[i]);
     }
 };

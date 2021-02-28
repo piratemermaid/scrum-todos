@@ -4,7 +4,8 @@ const seedData = require("../data/seedData");
 const { tags, items } = seedData;
 
 exports.seed = async function (knex) {
-    for (let i in tableOrder) {
+
+    for (let i = tableOrder.length - 1; i >= 0; i--) {
         await resetTable(knex, tableOrder[i]);
     }
 
