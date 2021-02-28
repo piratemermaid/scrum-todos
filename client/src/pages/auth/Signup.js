@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
 import { Container } from "react-bulma-components";
@@ -7,28 +7,21 @@ import { Form } from "react-bulma-components";
 import { Button } from "react-bulma-components";
 const { Field, Control, Label, Input } = Form;
 
-class Signup extends Component {
-    constructor(props) {
-        super(props);
+const Signup = () => {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordMatch, setPasswordMatch] = useState("");
+    const [formError, setFormError] = useState(null);
 
-        this.state = {
-            username: "",
-            email: "",
-            password: "",
-            passwordMatch: "",
-            errorMessage: null
-        };
-    }
-
-    onSubmit(e) {
+    const onSubmit = (e) => {
         e.preventDefault();
 
-        const error = this.validateFields();
+        const error = validateFields();
 
         if (error) {
-            this.setState({ errorMessage: error });
+            setFormError(error);
         } else {
-            const { username, password, passwordMatch, email } = this.state;
             axios({
                 method: "post",
                 url: "/api/account/signup",
@@ -36,24 +29,21 @@ class Signup extends Component {
             })
                 .then((res) => {
                     if (res.data.signup === "success") {
-                        this.props.authenticateUser(true);
-                        this.props.history.push("/");
+                        alert("SIGNUP");
                     }
                 })
                 .catch((err) => {
-                    this.setState({ errorMessage: err.response.data });
+                    setFormError(err.response.data);
                 });
         }
-    }
+    };
 
-    onInputChange(e, field) {
-        this.setState({ errorMessage: null });
-        this.setState({ [field]: e.target.value });
-    }
+    const onInputChange = (e, field) => {
+        setFormError(null);
+        // this.setState({ [field]: e.target.value });
+    };
 
-    validateFields() {
-        const { username, password, passwordMatch, email } = this.state;
-
+    const validateFields = () => {
         if (!username) {
             return "Please enter a username";
         }
@@ -76,104 +66,85 @@ class Signup extends Component {
         if (passwordMatch !== password) {
             return "Please enter a matching password";
         }
-        if (!validateEmail) {
+        if (!validateEmail(email)) {
             return "Invalid email";
         }
-    }
+    };
 
-    render() {
-        const {
-            username,
-            email,
-            password,
-            passwordMatch,
-            errorMessage
-        } = this.state;
-        return (
-            <div>
-                <h1>Sign Up</h1>
-                <Container>
-                    <Columns className="is-centered">
-                        <Columns.Column className="is-one-quarter-desktop">
-                            <form onSubmit={(e) => this.onSubmit(e)}>
-                                <Field>
-                                    <Label className="has-text-left">
-                                        Username
-                                    </Label>
-                                    <Input
-                                        id="username"
-                                        type="text"
-                                        placeholder="Username"
-                                        value={username}
-                                        onChange={(e) =>
-                                            this.onInputChange(e, "username")
-                                        }
-                                    />
-                                </Field>
-                                <Field>
-                                    <Label className="has-text-left">
-                                        Email
-                                    </Label>
-                                    <Input
-                                        id="email"
-                                        type="text"
-                                        placeholder="Email"
-                                        value={email}
-                                        onChange={(e) =>
-                                            this.onInputChange(e, "email")
-                                        }
-                                    />
-                                </Field>
-                                <Field>
-                                    <Label className="has-text-left">
-                                        Password
-                                    </Label>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Password"
-                                        value={password}
-                                        onChange={(e) =>
-                                            this.onInputChange(e, "password")
-                                        }
-                                    />
-                                </Field>
-                                <Field>
-                                    <Label className="has-text-left">
-                                        Confirm Password
-                                    </Label>
-                                    <Input
-                                        id="passwordMatch"
-                                        type="password"
-                                        placeholder="Confirm Password"
-                                        value={passwordMatch}
-                                        onChange={(e) =>
-                                            this.onInputChange(
-                                                e,
-                                                "passwordMatch"
-                                            )
-                                        }
-                                    />
-                                </Field>
-                                <div className="form-error">{errorMessage}</div>
-                                <button
-                                    type="button"
-                                    onClick={(e) => this.onSubmit(e)}
-                                >
-                                    Sign Up
-                                </button>
-                            </form>
-                            <div>
-                                Already have an account?{" "}
-                                <Link to="/login">Log In</Link>
-                            </div>
-                        </Columns.Column>
-                    </Columns>
-                </Container>
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            <h1>Sign Up</h1>
+            <Container>
+                <Columns className="is-centered">
+                    <Columns.Column className="is-one-quarter-desktop">
+                        <form onSubmit={onSubmit}>
+                            <Field>
+                                <Label className="has-text-left">
+                                    Username
+                                </Label>
+                                <Input
+                                    id="username"
+                                    type="text"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={(e) =>
+                                        setUsername(e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <Field>
+                                <Label className="has-text-left">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="text"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </Field>
+                            <Field>
+                                <Label className="has-text-left">
+                                    Password
+                                </Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <Field>
+                                <Label className="has-text-left">
+                                    Confirm Password
+                                </Label>
+                                <Input
+                                    id="passwordMatch"
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    value={passwordMatch}
+                                    onChange={(e) =>
+                                        setPasswordMatch(e.target.value)
+                                    }
+                                />
+                            </Field>
+                            <div className="form-error">{formError}</div>
+                            <button type="button" onClick={onSubmit}>
+                                Sign Up
+                            </button>
+                        </form>
+                        <div>
+                            Already have an account?{" "}
+                            <Link to="/login">Log In</Link>
+                        </div>
+                    </Columns.Column>
+                </Columns>
+            </Container>
+        </div>
+    );
+};
 
 function validateEmail(email) {
     //eslint-disable-next-line
