@@ -1,1 +1,1 @@
-module.exports = ["users", "boards", "users_boards", "items", "items_boards"];
+module.exports = ["users", "items", "tags", "users_items", "items_tags"];
