@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { Container } from "react-bulma-components";
@@ -13,6 +13,10 @@ const Login = () => {
     const [formError, setFormError] = useState(null);
 
     const history = useHistory();
+
+    useEffect(() => {
+        setFormError(null);
+    }, [username, password]);
 
     const onSubmit = async (e) => {
         e.preventDefault();
