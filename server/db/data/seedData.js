@@ -1,56 +1,64 @@
 const { hash } = require("../../api/helpers/account");
 
 module.exports = {
-    tags: ["Todos", "Daily", "Workout", "Stardew"],
+    boards: ["Todos", "Stardew"],
+    tags: ["daily", "workout"],
     items: [
         {
             name: "Pay excise tax",
+            board: "Todos",
+            tags: [],
             notes: "",
-            status: "todo",
-            tags: ["Todos"]
+            status: "todo"
         },
         {
             name: "Take out trash",
+            board: "Todos",
+            tags: [],
             notes: "",
             status: "todo",
-            tags: ["Todos"],
             repeat: "weekly"
         },
         {
             name: "Set up new bank account",
+            board: "Todos",
+            tags: [],
             notes: "",
             status: "inprogress",
-            tags: ["Todos"],
             blocker: "Awaiting customer service response"
         },
         {
             name: "Pullups",
+            board: "Todos",
+            tags: ["daily", "workout"],
             notes: "",
             status: "todo",
-            repeat: "daily",
-            tags: ["Todos", "Daily", "Workout"]
+            repeat: "daily"
         },
         {
             name: "Yoga or Stretch",
+            board: "Todos",
+            tags: ["daily", "workout"],
             notes: "",
             status: "done",
-            repeat: "daily",
-            tags: ["Todos", "Daily", "Workout"]
+            repeat: "daily"
         },
         {
             name: "Upgrade watering can",
+            board: "Stardew",
+            tags: [],
             notes: "",
-            status: "todo",
-            tags: ["Stardew"]
+            status: "todo"
         },
         {
             name: "Fill barn with animals",
+            board: "Stardew",
+            tags: [],
             notes: "2 pigs, 2 sheep (max animals 12)",
-            status: "inprogress",
-            tags: ["Stardew"]
+            status: "inprogress"
         }
         // {
-        //     name: "",
+        //     name: "",board:"Todos",
         //     notes: "",
         //     status: "",
         //     repeat: "",

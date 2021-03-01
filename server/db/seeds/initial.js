@@ -1,7 +1,7 @@
 const { keyBy } = require("lodash");
 const tableOrder = require("../tableOrder");
 const seedData = require("../data/seedData");
-const { users, tags, items } = seedData;
+const { users, boards, tags, items } = seedData;
 
 exports.seed = async function (knex) {
     for (let i = tableOrder.length - 1; i >= 0; i--) {
@@ -10,15 +10,21 @@ exports.seed = async function (knex) {
 
     await knex("users").insert(users).returning("*");
 
-    const tagsByName = keyBy(
-        await knex("tags")
+    const boardsByName = keyBy(
+        await knex("boards")
             .insert(
-                tags.map((tag) => {
-                    return { name: tag };
+                boards.map((name) => {
+                    return { name };
                 })
             )
             .returning("*"),
         "name"
+    );
+
+    await knex("users_boards").insert(
+        boards.map((name) => {
+            return { user_id: 1, board_id: boardsByName[name].id };
+        })
     );
 
     const itemsByName = keyBy(
@@ -39,6 +45,26 @@ exports.seed = async function (knex) {
         "name"
     );
 
+    await knex("boards_items").insert(
+        items.map(({ name, board }) => {
+            return {
+                board_id: boardsByName[board].id,
+                item_id: itemsByName[name].id
+            };
+        })
+    );
+
+    const tagsByName = keyBy(
+        await knex("tags")
+            .insert(
+                tags.map((tag) => {
+                    return { name: tag };
+                })
+            )
+            .returning("*"),
+        "name"
+    );
+
     let itemsTags = [];
     items.map(({ name, tags }) => {
         tags.map((tag) => {
@@ -50,12 +76,6 @@ exports.seed = async function (knex) {
     });
 
     await knex("items_tags").insert(itemsTags);
-
-    await knex("users_items").insert(
-        items.map(({ name }) => {
-            return { item_id: itemsByName[name].id, user_id: 1 };
-        })
-    );
 };
 
 // delete table and reset to start at id 1

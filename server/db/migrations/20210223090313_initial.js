@@ -9,6 +9,11 @@ module.exports.up = async function (knex) {
         table.string("sessionId");
     });
 
+    await knex.schema.createTable("boards", (table) => {
+        table.increments("id");
+        table.string("name");
+    });
+
     await knex.schema.createTable("items", (table) => {
         table.increments("id");
         table.integer("priority");
@@ -24,9 +29,15 @@ module.exports.up = async function (knex) {
         table.string("name");
     });
 
-    await knex.schema.createTable("users_items", (table) => {
+    await knex.schema.createTable("users_boards", (table) => {
         table.increments("id");
         table.integer("user_id").references("id").inTable("users");
+        table.integer("board_id").references("id").inTable("boards");
+    });
+
+    await knex.schema.createTable("boards_items", (table) => {
+        table.increments("id");
+        table.integer("board_id").references("id").inTable("boards");
         table.integer("item_id").references("id").inTable("items");
     });
 
