@@ -71,7 +71,7 @@ router.get("/boards", async (req, res) => {
         });
 
         res.send({
-            boards: userData.toJSON().boards.map(({ name, items }) => {
+            boards: userData.toJSON().boards.map(({ name }) => {
                 return { name };
             })
         });
@@ -93,7 +93,7 @@ router.get("/board_items", async (req, res) => {
         const { name } = req.query;
 
         const userData = await new models.User({ username }).fetch({
-            withRelated: ["boards.items"]
+            withRelated: ["boards.items.tags"]
         });
 
         const board = _.find(userData.toJSON().boards, { name });
@@ -108,7 +108,9 @@ router.get("/board_items", async (req, res) => {
                         status,
                         blocker,
                         repeat,
-                        tags
+                        tags: tags.map(({ name }) => {
+                            return name;
+                        })
                     };
                 }
             )
