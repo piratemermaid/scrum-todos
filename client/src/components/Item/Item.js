@@ -15,7 +15,7 @@ const Item = ({ item }) => {
                 <ul>
                     <li>Status: {status}</li>
                     <li>Priority: {priority}</li>
-                    <li>Tags: {tags.join(", ")}</li>
+                    <li>Tags: {tags ? tags.join(", ") : "none"}</li>
                     {notes && <li>Notes: {notes}</li>}
                     {blocker && <li>Blocker: {blocker}</li>}
                     {repeat && <li>Repeat: {repeat}</li>}
