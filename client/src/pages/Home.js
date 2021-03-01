@@ -1,4 +1,4 @@
-import React, { useState, useEffect, isValidElement } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter, useHistory } from "react-router";
 
@@ -20,22 +20,6 @@ const Home = (props) => {
         }
         fetchUserBoards();
     }, []);
-
-    const logOut = () => {
-        axios({
-            method: "get",
-            url: "/api/account/logout"
-        })
-            .then((res) => {
-                if (res.data.logout === "success") {
-                    props.authenticateUser(false);
-                    props.history.push("/");
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
     if (isLoading) {
         return "loading...";

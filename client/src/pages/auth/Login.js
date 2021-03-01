@@ -35,10 +35,10 @@ const Login = () => {
         }
     };
 
-    const onInputChange = (e, field) => {
-        setFormError(null);
-        // this.setState({ [field]: e.target.value });
-    };
+    // const onInputChange = (e, field) => {
+    //     setFormError(null);
+    //     // this.setState({ [field]: e.target.value });
+    // };
 
     return (
         <div>

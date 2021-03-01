@@ -37,10 +37,10 @@ const Signup = () => {
         }
     };
 
-    const onInputChange = (e, field) => {
-        setFormError(null);
-        // this.setState({ [field]: e.target.value });
-    };
+    // const onInputChange = (e, field) => {
+    //     setFormError(null);
+    //     // this.setState({ [field]: e.target.value });
+    // };
 
     const validateFields = () => {
         if (!username) {
