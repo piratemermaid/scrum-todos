@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, isValidElement } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 
+import Item from "../components/Item/Item";
+
 const Home = (props) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
@@ -11,6 +13,7 @@ const Home = (props) => {
             try {
                 const { data } = await axios.get("/api/user");
                 setBoards(data.boards);
+                setIsLoading(false);
             } catch (err) {
                 console.log(err);
             }
@@ -34,6 +37,11 @@ const Home = (props) => {
             });
     };
 
+    if (isLoading) {
+        return "loading...";
+    }
+
+    console.log(isLoading, boards);
     return (
         <div>
             <h1>Home</h1>
@@ -43,28 +51,20 @@ const Home = (props) => {
                     <div>
                         <h3>{name}</h3>
                         <ul>
-                            {items.map(
-                                ({
-                                    name,
-                                    priority,
-                                    notes,
-                                    status,
-                                    blocker,
-                                    repeat,
-                                    tags
-                                }) => {
-                                    return (
-                                        <li>
-                                            {name}
-                                            {tags.length > 0 && (
-                                                <span>
-                                                    {` (${tags.join(", ")})`}
-                                                </span>
-                                            )}
-                                        </li>
-                                    );
-                                }
-                            )}
+                            {items.map((item) => {
+                                const { name, tags } = item;
+                                return (
+                                    <Item key={item.name} item={item} />
+                                    // <li>
+                                    //     {name}
+                                    //     {tags.length > 0 && (
+                                    //         <span>
+                                    //             {` (${tags.join(", ")})`}
+                                    //         </span>
+                                    //     )}
+                                    // </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 );
