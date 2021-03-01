@@ -6,6 +6,7 @@ import "react-bulma-components/dist/react-bulma-components.min.css";
 
 import RequireAuth from "./components/RequireAuth";
 import Home from "./pages/Home";
+import Board from "./pages/Board";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 
@@ -55,6 +56,7 @@ class App extends Component {
         const { authenticated } = this.state;
 
         const AuthHome = RequireAuth(Home);
+        const AuthBoard = RequireAuth(Board);
 
         return (
             <div className="App">
@@ -75,6 +77,15 @@ class App extends Component {
                             path="/"
                             render={() => (
                                 <AuthHome
+                                    authenticated={authenticated}
+                                    authenticateUser={this.authenticateUser}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/board/:name"
+                            render={() => (
+                                <AuthBoard
                                     authenticated={authenticated}
                                     authenticateUser={this.authenticateUser}
                                 />

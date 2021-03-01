@@ -1,24 +1,24 @@
 import React, { useState, useEffect, isValidElement } from "react";
 import axios from "axios";
-import { withRouter } from "react-router";
-
-import Item from "../components/Item/Item";
+import { withRouter, useHistory } from "react-router";
 
 const Home = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [boards, setBoards] = useState([]);
 
+    const history = useHistory();
+
     useEffect(() => {
-        async function fetchUserData() {
+        async function fetchUserBoards() {
             try {
-                const { data } = await axios.get("/api/user");
+                const { data } = await axios.get("/api/user/boards");
                 setBoards(data.boards);
                 setIsLoading(false);
             } catch (err) {
                 console.log(err);
             }
         }
-        fetchUserData();
+        fetchUserBoards();
     }, []);
 
     const logOut = () => {
@@ -41,31 +41,18 @@ const Home = (props) => {
         return "loading...";
     }
 
-    console.log(isLoading, boards);
     return (
         <div>
             <h1>Home</h1>
             <h2>Your Boards</h2>
-            {boards.map(({ name, items }) => {
+            {boards.map(({ name }) => {
                 return (
-                    <div>
+                    <div
+                        onClick={() => {
+                            history.push(`/board/${name}`);
+                        }}
+                    >
                         <h3>{name}</h3>
-                        <ul>
-                            {items.map((item) => {
-                                const { name, tags } = item;
-                                return (
-                                    <Item key={item.name} item={item} />
-                                    // <li>
-                                    //     {name}
-                                    //     {tags.length > 0 && (
-                                    //         <span>
-                                    //             {` (${tags.join(", ")})`}
-                                    //         </span>
-                                    //     )}
-                                    // </li>
-                                );
-                            })}
-                        </ul>
                     </div>
                 );
             })}
