@@ -5,7 +5,11 @@ const { Field, Control, Label, Input } = Form;
 const InputField = ({ id, label, type, ...otherProps }) => {
     return (
         <Field>
-            <Label className="has-text-left">{label}</Label>
+            {otherProps.customLabel ? (
+                otherProps.customLabel
+            ) : (
+                <Label className="has-text-left">{label}</Label>
+            )}
             <Control>
                 <Input
                     id={id}
