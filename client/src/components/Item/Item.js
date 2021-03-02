@@ -35,7 +35,7 @@ const Item = ({ item }) => {
         try {
             await axios.post("/api/user/add_tag", {
                 name,
-                newTag: "test"
+                newTag
             });
             setNewTag("");
             setNewTagError(null);
