@@ -32,19 +32,25 @@ const Board = (props) => {
                 <Columns.Column>
                     <h2 className="is-size-4">To Do</h2>
                     {items.todo.map((item) => {
-                        return <Item item={item} key={item.name} />;
+                        return (
+                            <Item item={item} key={item.name} board={name} />
+                        );
                     })}
                 </Columns.Column>
                 <Columns.Column>
                     <h2 className="is-size-4">In Progress</h2>
                     {items.inprogress.map((item) => {
-                        return <Item item={item} key={item.name} />;
+                        return (
+                            <Item item={item} key={item.name} board={name} />
+                        );
                     })}
                 </Columns.Column>
                 <Columns.Column>
                     <h2 className="is-size-4">Done</h2>
                     {items.done.map((item) => {
-                        return <Item item={item} key={item.name} />;
+                        return (
+                            <Item item={item} key={item.name} board={name} />
+                        );
                     })}
                 </Columns.Column>
             </Columns>

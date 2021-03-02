@@ -129,26 +129,20 @@ router.post("/add_tag", async (req, res, next) => {
     }
 
     const { username } = Session.parse(sessionString);
-    const user = await getAccount(username);
 
-    const { name, newTag } = req.body;
+    const userData = await new models.User({
+        username
+    }).fetch({ withRelated: ["boards.items.tags"] });
 
-    const userBoardData = await new models.UserBoard({
-        user_id: user.id,
-        board_id: 1
-    }).fetch({ withRelated: ["board.items"] });
+    const { name, board, newTag } = req.body;
 
-    const item = _.find(userBoardData.toJSON().board.items, { name });
+    const boardData = _.find(userData.toJSON().boards, { name: board });
+    const itemData = _.find(boardData.items, { name });
 
-    const itemData = await new models.Item({ id: item.id }).fetch({
-        withRelated: ["tags"]
-    });
-
-    const { tags } = itemData.toJSON();
-    const tagExists = _.find(tags, { name: newTag });
-
+    const tagExists = _.find(itemData.tags, { name: newTag });
     if (tagExists) {
         res.status(400).send({ message: "Tag already set" });
+        return;
     }
 
     const newTagInsert = await knex("tags")
@@ -156,7 +150,7 @@ router.post("/add_tag", async (req, res, next) => {
         .returning("*");
 
     await knex("items_tags").insert({
-        item_id: item.id,
+        item_id: itemData.id,
         tag_id: newTagInsert[0].id
     });
 

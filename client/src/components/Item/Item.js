@@ -7,7 +7,7 @@ import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import Tag from "./Tag";
 import "./item.scss";
 
-const Item = ({ item }) => {
+const Item = ({ item, board }) => {
     const { name, priority, status, tags, notes, blocker, repeat } = item;
 
     const [addingTag, setAddingTag] = useState(false);
@@ -35,6 +35,7 @@ const Item = ({ item }) => {
         try {
             await axios.post("/api/user/add_tag", {
                 name,
+                board,
                 newTag
             });
             setNewTag("");
