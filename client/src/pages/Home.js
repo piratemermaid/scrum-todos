@@ -28,7 +28,7 @@ const Home = (props) => {
     return (
         <div>
             <h1>Home</h1>
-            <h2>Your Boards</h2>
+            <h2 className="is-size-3">Your Boards</h2>
             {boards.map(({ name }) => {
                 return (
                     <div
@@ -36,7 +36,7 @@ const Home = (props) => {
                             history.push(`/board/${name}`);
                         }}
                     >
-                        <h3>{name}</h3>
+                        <h3 className="board-name is-size-4">{name}</h3>
                     </div>
                 );
             })}

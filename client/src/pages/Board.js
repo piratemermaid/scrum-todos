@@ -27,22 +27,22 @@ const Board = (props) => {
 
     return (
         <Container>
-            <h1>{name}</h1>
+            <h1 className="is-size-3">{name}</h1>
             <Columns>
                 <Columns.Column>
-                    <h2>To Do</h2>
+                    <h2 className="is-size-4">To Do</h2>
                     {items.todo.map((item) => {
                         return <Item item={item} key={item.name} />;
                     })}
                 </Columns.Column>
                 <Columns.Column>
-                    <h2>In Progress</h2>
+                    <h2 className="is-size-4">In Progress</h2>
                     {items.inprogress.map((item) => {
                         return <Item item={item} key={item.name} />;
                     })}
                 </Columns.Column>
                 <Columns.Column>
-                    <h2>Done</h2>
+                    <h2 className="is-size-4">Done</h2>
                     {items.done.map((item) => {
                         return <Item item={item} key={item.name} />;
                     })}

@@ -1,0 +1,8 @@
+@import "./colors.scss";
+
+.board-name {
+    &:hover {
+        cursor: pointer;
+        color: $light-purple;
+    }
+}
