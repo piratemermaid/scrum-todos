@@ -1,12 +1,17 @@
 import _ from "lodash";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Container, Columns } from "react-bulma-components";
+import { Container, Columns, Modal } from "react-bulma-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import Item from "../components/Item/Item";
+import AddItemModal from "../components/Item/AddItemModal";
+import "../styles/board.scss";
 
 const Board = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     const { name } = props.match.params;
 
@@ -25,9 +30,18 @@ const Board = (props) => {
         return "loading...";
     }
 
+    const open = () => setShowModal(true);
+    const close = () => setShowModal(false);
+
     return (
-        <Container>
+        <Container id="board">
             <h1 className="is-size-3">{name}</h1>
+            <div className="show-modal" onClick={open}>
+                New Item <FontAwesomeIcon icon={faPlusCircle} />
+                <Modal show={showModal} onClose={close}>
+                    <AddItemModal close={close} {...props.modal} />
+                </Modal>
+            </div>
             <Columns>
                 <Columns.Column>
                     <h2 className="is-size-4">To Do</h2>
