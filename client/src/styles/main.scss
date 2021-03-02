@@ -1,0 +1,12 @@
+.App {
+    text-align: center;
+}
+
+// TODO: get Bulma columns working so we
+// don't need this
+@media screen and (max-width: 1023px) {
+    .columns form {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+}

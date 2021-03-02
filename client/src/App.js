@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import "./App.scss";
 import "./styles/main.scss";
 import "react-bulma-components/dist/react-bulma-components.min.css";
 
