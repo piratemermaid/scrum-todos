@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import { withRouter, useHistory } from "react-router";
+import BoardsContext from "../context/BoardsContext";
 
 const Home = (props) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [boards, setBoards] = useState([]);
+
+    const boards = useContext(BoardsContext);
 
     const history = useHistory();
 
     useEffect(() => {
-        async function fetchUserBoards() {
-            try {
-                const { data } = await axios.get("/api/user/boards");
-                setBoards(data.boards);
-                setIsLoading(false);
-            } catch (err) {
-                console.log(err);
-            }
+        if (boards) {
+            setIsLoading(false);
         }
-        fetchUserBoards();
-    }, []);
+    }, [boards]);
 
     if (isLoading) {
         return "loading...";
