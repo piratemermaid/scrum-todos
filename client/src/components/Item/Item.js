@@ -14,15 +14,23 @@ const Item = ({ item }) => {
     const [newTag, setNewTag] = useState("");
     const [newTagError, setNewTagError] = useState(null);
 
-    useEffect(() => {
+    const removeTagAdd = () => {
+        setAddingTag(false);
+        setNewTag("");
+        setNewTagError(null);
         const newTagEl = document.getElementById(`${name}-new-tag`);
         if (newTagEl) {
             newTagEl.focus();
         }
-    }, [addingTag]);
+    };
 
     const addTag = async (e) => {
         e.preventDefault();
+
+        if (newTag === "") {
+            removeTagAdd();
+            return;
+        }
 
         try {
             await axios.post("/api/user/add_tag", {
@@ -72,11 +80,7 @@ const Item = ({ item }) => {
                             />
                             <FontAwesomeIcon
                                 icon={faMinusCircle}
-                                onClick={() => {
-                                    setAddingTag(false);
-                                    setNewTag("");
-                                    setNewTagError(null);
-                                }}
+                                onClick={removeTagAdd}
                             />
                         </form>
                     )}
