@@ -1,13 +1,41 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import { Card } from "react-bulma-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import Tag from "./Tag";
 import "./item.scss";
 
 const Item = ({ item }) => {
     const { name, priority, status, tags, notes, blocker, repeat } = item;
+
+    const [addingTag, setAddingTag] = useState(false);
+    const [newTag, setNewTag] = useState("");
+    const [newTagError, setNewTagError] = useState(null);
+
+    useEffect(() => {
+        const newTagEl = document.getElementById(`${name}-new-tag`);
+        if (newTagEl) {
+            newTagEl.focus();
+        }
+    }, [addingTag]);
+
+    const addTag = async (e) => {
+        e.preventDefault();
+
+        try {
+            await axios.post("/api/user/add_tag", {
+                name,
+                newTag: "test"
+            });
+            setNewTag("");
+            setNewTagError(null);
+        } catch (err) {
+            const { message } = err.response.data;
+            setNewTagError(message);
+        }
+    };
 
     return (
         <Card className="item">
@@ -24,7 +52,37 @@ const Item = ({ item }) => {
                         tags.map((name) => {
                             return <Tag name={name} key={name} />;
                         })}
-                    <FontAwesomeIcon icon={faPlusCircle} />{" "}
+                    {!addingTag ? (
+                        <FontAwesomeIcon
+                            icon={faPlusCircle}
+                            onClick={() => setAddingTag(true)}
+                        />
+                    ) : (
+                        <form onSubmit={addTag}>
+                            <input
+                                id={`${name}-new-tag`}
+                                className="tag"
+                                type="text"
+                                placeholder="New Tag"
+                                onChange={(e) => {
+                                    setNewTag(e.target.value);
+                                    setNewTagError(null);
+                                }}
+                                value={newTag}
+                            />
+                            <FontAwesomeIcon
+                                icon={faMinusCircle}
+                                onClick={() => {
+                                    setAddingTag(false);
+                                    setNewTag("");
+                                    setNewTagError(null);
+                                }}
+                            />
+                        </form>
+                    )}
+                    {newTagError && (
+                        <span className="is-danger">{newTagError}</span>
+                    )}
                 </div>
             </Card.Content>
         </Card>

@@ -7,6 +7,13 @@ const User = bookshelf.model("User", {
     }
 });
 
+const UserBoard = bookshelf.model("UserBoard", {
+    tableName: "users_boards",
+    board() {
+        return this.belongsTo("Board");
+    }
+});
+
 const Board = bookshelf.model("Board", {
     tableName: "boards",
     items() {
@@ -25,4 +32,4 @@ const Tag = bookshelf.model("Tag", {
     tableName: "tags"
 });
 
-module.exports = { User };
+module.exports = { User, UserBoard, Item };
