@@ -15,20 +15,16 @@ const Board = (props) => {
     const [showModal, setShowModal] = useState(false);
 
     const boards = useContext(BoardsContext);
-    console.log("boards", boards);
 
     const { name } = props.match.params;
 
     useEffect(() => {
-        async function fetchItems() {
-            const { data } = await axios.get("/api/user/board_items", {
-                params: { name }
-            });
-            setItems(getItemsByStatus(data.items));
+        if (boards) {
+            const board = _.find(boards, { name });
+            setItems(getItemsByStatus(board.items));
             setIsLoading(false);
         }
-        fetchItems();
-    }, []);
+    }, [boards]);
 
     if (isLoading) {
         return "loading...";
