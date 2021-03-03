@@ -29,6 +29,7 @@ const Home = (props) => {
                         onClick={() => {
                             history.push(`/board/${name}`);
                         }}
+                        key={name}
                     >
                         <h3 className="board-name is-size-4">{name}</h3>
                     </div>
