@@ -57,7 +57,7 @@ const Item = ({ item, board }) => {
                 </ul>
                 <div className="tags is-size-7">
                     <p>Tags:</p>
-                    {tags.length > 0 &&
+                    {tags?.length > 0 &&
                         tags.map((name) => {
                             return <Tag name={name} key={name} />;
                         })}
