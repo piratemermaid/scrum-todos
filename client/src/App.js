@@ -11,8 +11,8 @@ import Signup from "./pages/auth/Signup";
 import "./styles/main.scss";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = { authenticated: false, boards: null };
 
