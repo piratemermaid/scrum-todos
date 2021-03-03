@@ -23,20 +23,11 @@ class App extends Component {
         this.setState({ authenticated: bool });
     }
 
-    logOut = () => {
-        axios({
+    logOut = async () => {
+        await axios({
             method: "get",
             url: "/api/account/logout"
-        })
-            .then((res) => {
-                if (res.data.logout === "success") {
-                    this.authenticateUser(false);
-                    this.props.history.push("/");
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        });
     };
 
     async componentDidMount() {
