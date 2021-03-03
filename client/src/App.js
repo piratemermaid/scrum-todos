@@ -34,7 +34,7 @@ class App extends Component {
             this.setState({ boards: newBoards });
         } catch (err) {
             // TODO: handle error
-            console.log(err);
+            const { message } = err.response.data;
         }
     };
 
