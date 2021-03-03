@@ -6,7 +6,7 @@ const { knex } = require("../models/config");
 
 const router = new Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
     const { sessionString } = req.cookies;
 
     if (!sessionString || !Session.verify(sessionString)) {
