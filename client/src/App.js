@@ -18,14 +18,24 @@ class App extends Component {
         this.setState({ authenticated: bool });
     }
 
-    addItem = (item, board) => {
-        const { boards } = this.state;
-        let newBoards = boards;
-        const boardIndex = _.findIndex(boards, { name: board });
-        let newItems = boards[boardIndex].items;
-        newItems.push({ ...item });
-        newBoards[boardIndex].items = newItems;
-        this.setState({ boards: newBoards });
+    addItem = async (item, board) => {
+        try {
+            const { data } = await axios.post("/api/user/add_item", {
+                item,
+                board
+            });
+
+            const { boards } = this.state;
+            let newBoards = boards;
+            const boardIndex = _.findIndex(boards, { name: board });
+            let newItems = boards[boardIndex].items;
+            newItems.push(_.omit(data, ["id"]));
+            newBoards[boardIndex].items = newItems;
+            this.setState({ boards: newBoards });
+        } catch (err) {
+            // TODO: handle error
+            console.log(err);
+        }
     };
 
     logOut = async () => {

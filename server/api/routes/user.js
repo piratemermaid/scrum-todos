@@ -141,8 +141,9 @@ router.post("/add_tag", async (req, res, next) => {
 
     const tagExists = _.find(itemData.tags, { name: newTag });
     if (tagExists) {
-        res.status(400).send({ message: "Tag already set" });
-        return;
+        const error = new Error("Tag already set");
+        error.status = 400;
+        return next(error);
     }
 
     const newTagInsert = await knex("tags")
@@ -155,6 +156,46 @@ router.post("/add_tag", async (req, res, next) => {
     });
 
     res.status(200).send("success");
+});
+
+router.post("/add_item", async (req, res, next) => {
+    const { sessionString } = req.cookies;
+
+    if (!sessionString || !Session.verify(sessionString)) {
+        const error = new Error("Invalid session");
+        error.status = 400;
+        return next(error);
+    }
+
+    const { username } = Session.parse(sessionString);
+
+    const userData = await new models.User({
+        username
+    }).fetch({ withRelated: ["boards.items.tags"] });
+
+    const { item, board } = req.body;
+
+    const boardData = _.find(userData.toJSON().boards, { name: board });
+    const itemExists = _.find(boardData.items, { name: item.name });
+    if (itemExists) {
+        const error = new Error("Item already exists on this board");
+        error.status = 400;
+        return next(error);
+    }
+
+    let maxPriority = _.maxBy(boardData.items, (boardItem) => {
+        return boardItem.priority;
+    }).priority;
+    const insertedItem = await knex("items")
+        .insert({ ...item, priority: maxPriority++ })
+        .returning("*");
+
+    await knex("boards_items").insert({
+        board_id: boardData.id,
+        item_id: insertedItem[0].id
+    });
+
+    res.status(200).send(insertedItem[0]);
 });
 
 module.exports = router;
