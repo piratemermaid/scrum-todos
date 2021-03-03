@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import axios from "axios";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
@@ -11,17 +12,21 @@ import Signup from "./pages/auth/Signup";
 import "./styles/main.scss";
 
 class App extends Component {
-    constructor() {
-        super();
-
-        this.state = { authenticated: false, boards: null };
-
-        this.authenticateUser = this.authenticateUser.bind(this);
-    }
+    state = { authenticated: false, boards: null };
 
     authenticateUser(bool) {
         this.setState({ authenticated: bool });
     }
+
+    addItem = (item, board) => {
+        const { boards } = this.state;
+        let newBoards = boards;
+        const boardIndex = _.findIndex(boards, { name: board });
+        let newItems = boards[boardIndex].items;
+        newItems.push({ ...item });
+        newBoards[boardIndex].items = newItems;
+        this.setState({ boards: newBoards });
+    };
 
     logOut = async () => {
         await axios({
@@ -56,8 +61,10 @@ class App extends Component {
         const AuthHome = RequireAuth(Home);
         const AuthBoard = RequireAuth(Board);
 
+        const value = { boards: this.state.boards, addItem: this.addItem };
+
         return (
-            <BoardsContext.Provider value={this.state.boards}>
+            <BoardsContext.Provider value={value}>
                 <div className="App">
                     <BrowserRouter>
                         <header>
@@ -77,7 +84,9 @@ class App extends Component {
                                 render={() => (
                                     <AuthHome
                                         authenticated={authenticated}
-                                        authenticateUser={this.authenticateUser}
+                                        authenticateUser={this.authenticateUser.bind(
+                                            this
+                                        )}
                                     />
                                 )}
                             />
@@ -86,7 +95,9 @@ class App extends Component {
                                 render={() => (
                                     <AuthBoard
                                         authenticated={authenticated}
-                                        authenticateUser={this.authenticateUser}
+                                        authenticateUser={this.authenticateUser.bind(
+                                            this
+                                        )}
                                     />
                                 )}
                             />
@@ -94,7 +105,9 @@ class App extends Component {
                                 path="/login"
                                 render={() => (
                                     <Login
-                                        authenticateUser={this.authenticateUser}
+                                        authenticateUser={this.authenticateUser.bind(
+                                            this
+                                        )}
                                     />
                                 )}
                             />
@@ -102,7 +115,9 @@ class App extends Component {
                                 path="/signup"
                                 render={() => (
                                     <Signup
-                                        authenticateUser={this.authenticateUser}
+                                        authenticateUser={this.authenticateUser.bind(
+                                            this
+                                        )}
                                     />
                                 )}
                             />

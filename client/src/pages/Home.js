@@ -5,7 +5,7 @@ import BoardsContext from "../context/BoardsContext";
 const Home = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
-    const boards = useContext(BoardsContext);
+    const { boards } = useContext(BoardsContext);
 
     const history = useHistory();
 

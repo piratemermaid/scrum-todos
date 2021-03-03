@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Card, Button, Form } from "react-bulma-components";
+import BoardsContext from "../../context/BoardsContext";
 import InputField from "../Form/InputField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
-const { Textarea, Field, Label, Control } = Form;
+const { Textarea, Field, Label, Control, Select, SelectControlled } = Form;
 
 const initialValues = {
     name: "",
+    status: "To Do",
     notes: "",
     blocker: "",
     repeat: ""
@@ -21,9 +23,14 @@ const AddItemModal = (props) => {
     const [values, setValues] = useState(initialValues);
     const [shown, setShown] = useState(initialShown);
 
+    const { addItem } = useContext(BoardsContext);
+
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log("submit", values);
+        addItem(
+            { ...values, status: getStatusText(values.status) },
+            props.board
+        );
     };
 
     const handleChange = (e) => {
@@ -31,6 +38,13 @@ const AddItemModal = (props) => {
         let newValues = { ...values };
         newValues[id] = e.target.value;
         setValues(newValues);
+    };
+
+    const handleSelectChange = (e) => {
+        setValues({
+            ...values,
+            status: e.target.value
+        });
     };
 
     const toggleShown = (label) => {
@@ -63,6 +77,19 @@ const AddItemModal = (props) => {
                         value={values.name}
                         onChange={handleChange}
                     />
+                    <Field>
+                        <Label>Status</Label>
+                        <Control>
+                            <Select
+                                onChange={handleSelectChange}
+                                value={values.status}
+                            >
+                                <option>To Do</option>
+                                <option>In Progress</option>
+                                <option>Done</option>
+                            </Select>
+                        </Control>
+                    </Field>
                     {shown.notes ? (
                         <Field className="item-property">
                             <Label>
@@ -133,6 +160,17 @@ const AddItemModal = (props) => {
             </Card.Content>
         </Card>
     );
+};
+
+const getStatusText = (status) => {
+    switch (status) {
+        case "To Do":
+            return "todo";
+        case "In Progress":
+            return "inprogress";
+        default:
+            return "done";
+    }
 };
 
 export default AddItemModal;

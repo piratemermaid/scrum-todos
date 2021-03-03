@@ -14,7 +14,7 @@ const Board = (props) => {
     const [items, setItems] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
-    const boards = useContext(BoardsContext);
+    const { boards } = useContext(BoardsContext);
 
     const { name } = props.match.params;
 
@@ -22,7 +22,9 @@ const Board = (props) => {
         if (boards) {
             const board = _.find(boards, { name });
             setItems(getItemsByStatus(board.items));
-            setIsLoading(false);
+            if (isLoading) {
+                setIsLoading(false);
+            }
         }
     }, [boards]);
 
@@ -39,7 +41,7 @@ const Board = (props) => {
             <div className="show-modal" onClick={open}>
                 New Item <FontAwesomeIcon icon={faPlusCircle} />
                 <Modal show={showModal} onClose={close}>
-                    <AddItemModal close={close} {...props.modal} />
+                    <AddItemModal close={close} board={name} {...props.modal} />
                 </Modal>
             </div>
             <Columns>
