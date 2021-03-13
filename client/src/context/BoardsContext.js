@@ -2,7 +2,8 @@ import React from "react";
 
 const BoardContext = React.createContext({
     boards: [],
-    addItem: () => {}
+    addItem: () => {},
+    addItemErr: null
 });
 
 export default BoardContext;

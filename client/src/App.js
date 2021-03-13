@@ -12,7 +12,7 @@ import Signup from "./pages/auth/Signup";
 import "./styles/main.scss";
 
 class App extends Component {
-    state = { authenticated: false, boards: null };
+    state = { authenticated: false, boards: null, addItemErr: null };
 
     authenticateUser(bool) {
         this.setState({ authenticated: bool });
@@ -33,8 +33,8 @@ class App extends Component {
             newBoards[boardIndex].items = newItems;
             this.setState({ boards: newBoards });
         } catch (err) {
-            // TODO: handle error
             const { message } = err.response.data;
+            this.setState({ addItemErr: message });
         }
     };
 
@@ -66,12 +66,12 @@ class App extends Component {
     }
 
     render() {
-        const { authenticated } = this.state;
+        const { authenticated, boards, addItemErr } = this.state;
 
         const AuthHome = RequireAuth(Home);
         const AuthBoard = RequireAuth(Board);
 
-        const value = { boards: this.state.boards, addItem: this.addItem };
+        const value = { boards, addItem: this.addItem, addItemErr };
 
         return (
             <BoardsContext.Provider value={value}>

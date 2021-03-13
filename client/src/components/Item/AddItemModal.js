@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Card, Button, Form } from "react-bulma-components";
 import BoardsContext from "../../context/BoardsContext";
 import InputField from "../Form/InputField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
-const { Textarea, Field, Label, Control, Select, SelectControlled } = Form;
+const { Textarea, Field, Label, Control, Select } = Form;
 
 const initialValues = {
     name: "",
@@ -22,16 +22,26 @@ const initialShown = {
 const AddItemModal = (props) => {
     const [values, setValues] = useState(initialValues);
     const [shown, setShown] = useState(initialShown);
+    const [isAdding, setIsAdding] = useState(null);
 
-    const { addItem } = useContext(BoardsContext);
+    const { addItem, addItemErr } = useContext(BoardsContext);
+    console.log("addItemErr", addItemErr);
 
     const onSubmit = (e) => {
         e.preventDefault();
+        setIsAdding(true);
         addItem(
             { ...values, status: getStatusText(values.status) },
             props.board
         );
     };
+
+    useEffect(() => {
+        if (!addItemErr) {
+            setIsAdding(false);
+            props.close();
+        }
+    }, [addItemErr]);
 
     const handleChange = (e) => {
         const id = e.target.getAttribute("id");
@@ -154,6 +164,7 @@ const AddItemModal = (props) => {
                     ) : (
                         renderShowToggle("repeat")
                     )}
+                    {addItemErr && <p className="is-danger">{addItemErr}</p>}
                     <Button onClick={onSubmit}>Add</Button>
                     <Button onClick={props.close}>Cancel</Button>
                 </form>

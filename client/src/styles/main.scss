@@ -1,3 +1,5 @@
+@import "./colors.scss";
+
 .App {
     text-align: center;
 }
@@ -9,4 +11,12 @@
         margin-left: 100px;
         margin-right: 100px;
     }
+}
+
+.is-danger {
+    color: $danger;
+}
+
+.is-success {
+    color: $success;
 }
