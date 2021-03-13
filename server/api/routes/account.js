@@ -44,7 +44,10 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res) => {
-    const { username, password } = req.query;
+    // TODO: remove this before release
+    // const { username, password } = req.query;
+    const username = "testaccount";
+    const password = "1234";
 
     let account = await getAccount(username);
     if (!account) {
