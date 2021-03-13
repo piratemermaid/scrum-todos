@@ -35,18 +35,19 @@
     }
 }
 
-#add-item-modal {
-    p {
-        margin-bottom: 20px;
+.add-item-card {
+    input {
+        background: none;
+        box-shadow: none;
+        border-bottom: 1px solid black;
     }
-    textarea {
-        height: 200px;
-    }
-    .item-property {
-        margin: 12px 0;
-    }
-    .show-toggle {
-        display: block;
-        margin-bottom: 20px;
+
+    .cancel {
+        text-align: right;
+        button {
+            margin-top: 12px;
+            padding: 2px 6px;
+            font-size: 0.9rem;
+        }
     }
 }

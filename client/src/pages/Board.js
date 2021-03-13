@@ -1,20 +1,15 @@
 import _ from "lodash";
-import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Columns, Modal } from "react-bulma-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import Item from "../components/Item/Item";
-import AddItemModal from "../components/Item/AddItemModal";
-import BoardsContext from "../context/BoardsContext";
+import { Container, Columns } from "react-bulma-components";
+import BoardColumn from "../components/Item/BoardColumn";
 import "../styles/board.scss";
+import BoardContext from "../context/BoardsContext";
 
 const Board = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
-    const [showModal, setShowModal] = useState(false);
 
-    const { boards } = useContext(BoardsContext);
+    const { boards } = useContext(BoardContext);
 
     const { name } = props.match.params;
 
@@ -32,43 +27,17 @@ const Board = (props) => {
         return "loading...";
     }
 
-    const open = () => setShowModal(true);
-    const close = () => setShowModal(false);
-
     return (
         <Container id="board">
             <h1 className="is-size-3">{name}</h1>
-            <div className="show-modal" onClick={open}>
-                New Item <FontAwesomeIcon icon={faPlusCircle} />
-                <Modal show={showModal} onClose={close}>
-                    <AddItemModal close={close} board={name} {...props.modal} />
-                </Modal>
-            </div>
             <Columns>
-                <Columns.Column>
-                    <h2 className="is-size-4">To Do</h2>
-                    {items.todo.map((item) => {
-                        return (
-                            <Item item={item} key={item.name} board={name} />
-                        );
-                    })}
-                </Columns.Column>
-                <Columns.Column>
-                    <h2 className="is-size-4">In Progress</h2>
-                    {items.inprogress.map((item) => {
-                        return (
-                            <Item item={item} key={item.name} board={name} />
-                        );
-                    })}
-                </Columns.Column>
-                <Columns.Column>
-                    <h2 className="is-size-4">Done</h2>
-                    {items.done.map((item) => {
-                        return (
-                            <Item item={item} key={item.name} board={name} />
-                        );
-                    })}
-                </Columns.Column>
+                <BoardColumn title="To Do" items={items.todo} board={name} />
+                <BoardColumn
+                    title="In Progress"
+                    items={items.inprogress}
+                    board={name}
+                />
+                <BoardColumn title="Done" items={items.done} board={name} />
             </Columns>
         </Container>
     );
