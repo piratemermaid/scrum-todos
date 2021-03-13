@@ -12,7 +12,12 @@ import Signup from "./pages/auth/Signup";
 import "./styles/main.scss";
 
 class App extends Component {
-    state = { authenticated: false, boards: null, addItemErr: null };
+    state = {
+        isLoading: true,
+        authenticated: false,
+        boards: null,
+        addItemErr: null
+    };
 
     authenticateUser(bool) {
         this.setState({ authenticated: bool });
@@ -35,18 +40,7 @@ class App extends Component {
         });
     };
 
-    async componentDidMount() {
-        await axios({
-            method: "get",
-            url: "/api/account/authenticated"
-        })
-            .then((res) => {
-                this.setState({ authenticated: res.data.authenticated });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
+    async fetchUserData() {
         try {
             const { data } = await axios.get("/api/user");
             this.setState({ boards: data.boards });
@@ -55,8 +49,29 @@ class App extends Component {
         }
     }
 
+    async componentDidMount() {
+        try {
+            const authRes = await axios({
+                method: "get",
+                url: "/api/account/authenticated"
+            });
+            const { authenticated } = authRes.data;
+            this.setState({ authenticated: authenticated });
+
+            await this.fetchUserData();
+        } catch (err) {
+            console.log(err);
+        }
+
+        this.setState({ isLoading: false });
+    }
+
     render() {
-        const { authenticated, boards, addItemErr } = this.state;
+        const { isLoading, authenticated, boards, addItemErr } = this.state;
+
+        if (isLoading) {
+            return "loading...";
+        }
 
         const AuthHome = RequireAuth(Home);
         const AuthBoard = RequireAuth(Board);
@@ -106,6 +121,9 @@ class App extends Component {
                                 render={() => (
                                     <Login
                                         authenticateUser={this.authenticateUser.bind(
+                                            this
+                                        )}
+                                        fetchUserData={this.fetchUserData.bind(
                                             this
                                         )}
                                     />

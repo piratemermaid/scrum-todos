@@ -7,7 +7,7 @@ import { Form } from "react-bulma-components";
 import { Button } from "react-bulma-components";
 const { Field, Control, Label, Input } = Form;
 
-const Login = () => {
+const Login = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [formError, setFormError] = useState(null);
@@ -28,17 +28,13 @@ const Login = () => {
                 params: { username, password }
             });
             if (data.login === "success") {
+                props.fetchUserData();
                 history.push("/");
             }
         } catch (err) {
             setFormError(err.response.data);
         }
     };
-
-    // const onInputChange = (e, field) => {
-    //     setFormError(null);
-    //     // this.setState({ [field]: e.target.value });
-    // };
 
     return (
         <div>
