@@ -1,0 +1,11 @@
+@import "./colors.scss";
+
+#home {
+    .board-card {
+        max-width: 300px;
+        &:hover {
+            cursor: pointer;
+            background-color: $light-purple;
+        }
+    }
+}
